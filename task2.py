@@ -4,6 +4,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score, recall_score, f1_score
 import tensorflow as tf 
 import os 
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+
+
+
 data = []  # List to store image data
 labels = []  # List to store labels
 
@@ -31,12 +37,20 @@ from sklearn.neural_network import MLPClassifier
 #create a classifier
 mlp = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=250, activation='relu', solver='adam', random_state=42)
 
+print('start training')
 #train the model
 mlp.fit(X_train, y_train)
+#training model score
+print("Training Data Accuracy:", mlp.score(X_train, y_train))
 
-from sklearn.metrics import accuracy_score, classification_report
-
+#test data score
 y_pred = mlp.predict(X_test)
-
-print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Test Data Accuracy:", accuracy_score(y_test, y_pred))
 print(classification_report(y_test, y_pred))
+
+#display the confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+#plot the confusion matrix
+sns.heatmap(cm, annot=True)
+plt.show()
